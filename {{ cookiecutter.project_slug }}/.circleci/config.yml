@@ -1,0 +1,34 @@
+version: 2
+aliases:
+  - &container_python
+    docker:
+      - image: circleci/python:3.6.4  # primary container for the build job
+
+  - &run_task_install_tox_dependencies
+    run:
+      name: install tox dependencies
+      command: |
+        sudo apt-get -qq update
+        sudo apt install -y build-essential libssl-dev libpython-dev python python-pip
+        sudo pip install tox
+
+  # All required steps for generatin a sphinx-doc
+  # http://www.sphinx-doc.org/en/master/
+  - &steps_build_sphinx_doc
+    steps:
+      - checkout
+      - *run_task_install_tox_dependencies
+      - run:
+          name: build the sphinx documentation
+          command: |
+            tox -e docs
+jobs:
+  builddocs:
+    <<: *container_python
+    <<: *steps_build_sphinx_doc
+
+workflows:
+  version: 2
+  classicci:
+    jobs:
+      - builddocs
