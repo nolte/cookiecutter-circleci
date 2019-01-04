@@ -1,5 +1,7 @@
 {
-    "generate_tox_docs": true,
-    "generate_tox_file": false,
-    "project_slug": ""
+    "generate_tox_docs": "y",
+    "generate_tox_file": "n",
+    "generate_sphinx_doc": "n",
+    "project_slug": "",
+    "project_type": ["cookiecutter"]
 }
