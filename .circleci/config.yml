@@ -257,6 +257,7 @@ jobs:
       - *run_task_add_gh_known_hosts
       - attach_workspace:
           at: /tmp/workspaces
+      - *run_task_load_current_version_bumpversion_cfg    
       - run:
           name: create github pre-release
           command: |
