@@ -22,6 +22,10 @@ jobs:
           name: build the sphinx documentation
           command: |
             tox -e docs
+      - store_artifacts:
+          path: .tox/docs/tmp/html
+          destination: sphinx
+
   testing:
     <<: *container_python
     steps:
