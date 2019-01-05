@@ -11,6 +11,8 @@ aliases:
       fingerprints:
         - *deploy_ssh_fingerprint
 
+  # Configure git user settings
+  # @see https://help.github.com/articles/setting-your-username-in-git/
   - &run_task_configure_git
     run:
       name: configure git set global settings
@@ -43,8 +45,6 @@ aliases:
         LAST_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest | jq -r '.tag_name' )"
         echo $LAST_VERSION > /tmp/workspace/last_release.txt
 
-
-
   # Load one version behind the latest GitHub Release
   # Reuqired jq in the path
   # @see https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
@@ -55,6 +55,9 @@ aliases:
         PREVIOUS_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases | jq -r '.[1].tag_name' )"
         echo $PREVIOUS_VERSION > /tmp/workspace/previous_release.txt
 
+  # extract the current version from the .bumpversion.cfg
+  # save the extractd version to /tmp/workspace/current_version.txt for later use
+  # @see https://github.com/peritus/bumpversion
   - &run_task_load_current_version_bumpversion_cfg
     run:
       name: Load the Current Version from .bumpversion.cfg
@@ -80,6 +83,8 @@ aliases:
     docker:
       - image: circleci/python:3.6.4
 
+  # @see https://tox.readthedocs.io/en/latest/install.html
+  # Install tox required system dependencies
   - &run_task_install_tox_dependencies
     run:
       name: install tox dependencies
