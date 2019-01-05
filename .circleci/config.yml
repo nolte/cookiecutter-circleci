@@ -10,6 +10,10 @@ aliases:
     add_ssh_keys:
       fingerprints:
         - *deploy_ssh_fingerprint
+  - &run_task_add_gh_known_hosts
+    run:
+      name: Keyscan Github (HACK)
+      command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
   # Configure git user settings
   # @see https://help.github.com/articles/setting-your-username-in-git/
@@ -43,7 +47,7 @@ aliases:
       name: Load the Latest GH Release
       command: |
         LAST_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest | jq -r '.tag_name' )"
-        echo $LAST_VERSION > /tmp/workspace/last_release.txt
+        echo $LAST_VERSION > /tmp/workspaces/last_release.txt
 
   # Load one version behind the latest GitHub Release
   # Reuqired jq in the path
@@ -53,18 +57,17 @@ aliases:
       name: Load the Previous GH Release
       command: |
         PREVIOUS_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases | jq -r '.[1].tag_name' )"
-        echo $PREVIOUS_VERSION > /tmp/workspace/previous_release.txt
+        echo $PREVIOUS_VERSION > /tmp/workspaces/previous_release.txt
 
   # extract the current version from the .bumpversion.cfg
-  # save the extractd version to /tmp/workspace/current_version.txt for later use
+  # save the extractd version to /tmp/workspaces/current_version.txt for later use
   # @see https://github.com/peritus/bumpversion
   - &run_task_load_current_version_bumpversion_cfg
     run:
       name: Load the Current Version from .bumpversion.cfg
       command: |
         CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
-        mkdir -p /tmp/workspace/
-        echo $CURRENT_VERSION > /tmp/workspace/current_version.txt
+        echo $CURRENT_VERSION > /tmp/workspaces/current_version.txt
 
   - &run_task_push_github_page
     run:
@@ -72,7 +75,7 @@ aliases:
         git clone $CIRCLE_REPOSITORY_URL --branch gh-pages --single-branch /tmp/ghpage
         cd /tmp/ghpage
         git rm -rf .
-        cp -r /tmp/workspace_ghpage/html/. /tmp/ghpage
+        cp -r /tmp/workspaces/html/. /tmp/ghpage
         git add -A
         git commit -m "[ci skip] Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
         git push origin gh-pages
@@ -100,27 +103,28 @@ jobs:
   # the container wraps https://github.com/github-changelog-generator/github-changelog-generator
   generate-changelog:
     machine: true
-    working_directory: /tmp/workspace
+    working_directory: /tmp/workspaces/changelog
     steps:
       - *run_task_prepare_jq
       - *run_task_load_latest_ghrelease
       - run:
           name: generate CHANGELOG.md
           command: |
-            LAST_VERSION="$(cat /tmp/workspace/last_release.txt)"
+            LAST_VERSION="$(cat /tmp/workspaces/last_release.txt)"
             docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator:1.15.0.pre.beta --user ${CIRCLE_PROJECT_USERNAME} --project ${CIRCLE_PROJECT_REPONAME} --token ${GITHUB_TOKEN} --since-tag $LAST_VERSION
       - store_artifacts:
-          path: /tmp/workspace
+          path: /tmp/workspaces/changelog
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: /tmp/workspaces/changelog
           paths:
               - CHANGELOG.md
 
   builddocs:
     <<: *container_python
-    working_directory: /tmp/workspace_ghpage
+    working_directory: /tmp/workspaces/build
     steps:
-      - checkout
+      - attach_workspace:
+          at: /tmp/workspaces
       - *run_task_install_tox_dependencies
       - run:
           name: build the sphinx documentation
@@ -130,29 +134,27 @@ jobs:
           path: .tox/docs/tmp/html
           destination: sphinx
       - persist_to_workspace:
-          root: /tmp/workspace_ghpage/.tox/docs/tmp
+          root: /tmp/workspaces/build/.tox/docs/tmp
           paths:
               - html
 
   publishghpage:
     <<: *container_python
+    working_directory: /tmp/workspaces/html
     steps:
+      - attach_workspace:
+          at: /tmp/workspaces
       - *run_task_configure_git
       - *run_task_add_key
-      - checkout
-      - attach_workspace:
-          at: /tmp/workspace_ghpage
+      - *run_task_add_gh_known_hosts
       - *run_task_push_github_page
-      - run:
-          name: build the sphinx documentation
-          command: |
-            ls -all /tmp/workspace_ghpage
-            ls -all /tmp/workspace_ghpage/html
 
   testing:
     <<: *container_python
+    working_directory: /tmp/workspaces/build
     steps:
-      - checkout
+      - attach_workspace:
+          at: /tmp/workspaces
       - *run_task_install_tox_dependencies
       - run:
           name: execute the pytests documentation
@@ -160,14 +162,64 @@ jobs:
             tox -e test
       - store_test_results:
           path: .tox/test/tmp/reports
-
+  finializebuild:
+    <<: *container_python
+    working_directory: /tmp/workspaces/build
+    steps:
+      - *run_task_configure_git
+      - *run_task_add_key
+      - attach_workspace:
+          at: /tmp/workspaces
+      - run:
+          name: execute the pytests documentation
+          command: |
+            if [ -f /tmp/workspaces/release_build.txt ]; then
+                echo "File not found!"
+                releaseBranch = $(cat /tmp/workspaces/release_build.txt)
+                git push origin release/$releaseBranch
+                git push origin $ ${CIRCLE_BRANCH}
+            fi
+  check_grade_up_build:
+    <<: *container_python
+    working_directory: /tmp/workspaces/build
+    steps:
+      - *run_task_configure_git
+      - *run_task_add_key
+      - *run_task_install_tox_dependencies
+      - checkout
+      - run:
+          name: debug
+          command: |
+            sudo pip install bumpversion
+      - run:
+          name: debug
+          command: |
+            GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+            echo $GIT_COMMIT_DESC
+            if [[ $GIT_COMMIT_DESC == *"[GradeUP]"* ]] && [[$CIRCLE_BRANCH == "develop"]]; then
+              currentVersion=$(bumpversion --allow-dirty --dry-run --list release | grep new_version | sed -r s,"^.*=",,)
+              bumpversion --commit release
+              git checkout -b release/v$currentVersion-pre
+              git checkout develop
+              bumpversion --commit minor
+              echo "v$currentVersion-pre" > /tmp/workspaces/release_build.txt
+            else
+               echo "classic build"
+            fi
+      - persist_to_workspace:
+          root: /tmp/workspaces
+          paths:
+              - build/*
+              - release_build.txt
   integrate_release:
     <<: *container_releasemanager
+    working_directory: /tmp/workspaces/build
     steps:
       - *run_task_prepare_jq
       - *run_task_configure_git
       - *run_task_add_key
-      - checkout
+      - attach_workspace:
+          at: /tmp/workspaces
       - run:
           name: debug
           command: |
@@ -186,20 +238,21 @@ jobs:
       - run:
           name: create release tag
           command: |
-            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
             git tag v$CURRENT_VERSION
             git push origin v$CURRENT_VERSION
 
       - run:
-          name: install aktau/github-release manager
+          name: create github pre-release
           command: |
-            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
+            message="$(cat /tmp/workspaces/changelog/CHANGELOG.md)"
             github-release release \
                 --user ${CIRCLE_PROJECT_USERNAME} \
                 --repo ${CIRCLE_PROJECT_REPONAME} \
                 --tag "v${CURRENT_VERSION}" \
                 --name "v${CURRENT_VERSION}" \
-                --description "simple release" \
+                --description "${message}" \
                 --pre-release
       - run:
           name: delete the release branch
@@ -210,21 +263,33 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - generate-changelog
-      - builddocs
-      - testing
+      - check_grade_up_build
+      - generate-changelog:
+          requires:
+            - check_grade_up_build
+      - builddocs:
+          requires:
+            - check_grade_up_build
+      - testing:
+          requires:
+            - check_grade_up_build
       - publishghpage:
           requires:
             - builddocs
+            - testing
           filters:
             branches:
               only:
                 - master
+      - finializebuild:
+          requires:
+            - testing
+            - builddocs
       - integrate_release:
           filters:
             branches:
               only:
                 - /release\/v.*-pre/
           requires:
-            - testing
-            - builddocs
+            - finializebuild
+            - generate-changelog
