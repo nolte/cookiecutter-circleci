@@ -1,8 +1,46 @@
 version: 2
 aliases:
+
+  # @see https://github.com/aktau/github-release
+  # Used container for handle github release actions
+  - &container_releasemanager
+    docker:
+      - image: circleci/golang:1.8
+
+  # @see https://stedolan.github.io/jq/
+  # used for better JSon Command Line parsing.
+  - &run_task_prepare_jq
+    run:
+      name: install jq to path
+      command: |
+        sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
+        sudo chmod +x /usr/bin/jq
+
+  # Load the latest GitHub Release
+  # Reuqired jq in the path
+  # @see https://developer.github.com/v3/repos/releases/#get-the-latest-release
+  - &run_task_load_latest_ghrelease
+    run:
+      name: Load the Latest GH Release
+      command: |
+        LAST_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest | jq -r '.tag_name' )"
+        echo $LAST_VERSION > /tmp/workspace/last_release.txt
+
+  # Load one version behind the latest GitHub Release
+  # Reuqired jq in the path
+  # @see https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
+  - &run_task_load_previous_ghrelease
+    run:
+      name: Load the Previous GH Release
+      command: |
+        PREVIOUS_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases | jq -r '.[1].tag_name' )"
+        echo $PREVIOUS_VERSION > /tmp/workspace/previous_release.txt
+
+  # @see https://circleci.com/docs/2.0/language-python/
+  # Used container for python based uilds
   - &container_python
     docker:
-      - image: circleci/python:3.6.4  # primary container for the build job
+      - image: circleci/python:3.6.4
 
   - &run_task_install_tox_dependencies
     run:
@@ -13,6 +51,28 @@ aliases:
         sudo pip install tox
 
 jobs:
+
+  # generate a changelog from existing github commits/pull requests
+  # using https://github.com/ferrarimarco/docker-github-changelog-generator as generate container
+  # the container wraps https://github.com/github-changelog-generator/github-changelog-generator
+  generate-changelog:
+    machine: true
+    working_directory: /tmp/workspace
+    steps:
+      - *run_task_prepare_jq
+      - *run_task_load_latest_ghrelease
+      - run:
+          name: generate CHANGELOG.md
+          command: |
+            LAST_VERSION="$(cat /tmp/workspace/last_release.txt)"
+            docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator:1.15.0.pre.beta --user ${CIRCLE_PROJECT_USERNAME} --project ${CIRCLE_PROJECT_REPONAME} --token ${GITHUB_TOKEN} --since-tag $LAST_VERSION
+      - store_artifacts:
+          path: /tmp/workspace
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+              - CHANGELOG.md
+
   builddocs:
     <<: *container_python
     steps:
@@ -39,26 +99,36 @@ jobs:
           path: .tox/test/tmp/reports
 
   integrate_release:
-    <<: *container_python
+    <<: *container_releasemanager
     steps:
+      - *run_task_prepare_jq
       - checkout
+      - run:
+          name: debug
+          command: |
+            git status
       - run:
           name: merge to master
           command: |
             echo "merge to master"
 
+      - run:
+          name: delete the release branch
+          command: |
+            echo "git push origin --delete ${CIRCLE_BRANCH}"
 
 workflows:
   version: 2
   build_and_test:
     jobs:
+      - generate-changelog
       - builddocs
       - testing
       - integrate_release:
           filters:
             branches:
               only:
-                - /release-.*-pre/
+                - /release\/v.*-pre/
           requires:
             - testing
             - builddocs
