@@ -305,4 +305,5 @@ workflows:
           requires:
             - integrate_release
       - create_gh_release:
-          - generate-changelog
+          requires:
+            - generate-changelog
