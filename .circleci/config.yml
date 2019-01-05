@@ -111,7 +111,7 @@ jobs:
           name: generate CHANGELOG.md
           command: |
             LAST_VERSION="$(cat /tmp/workspaces/last_release.txt)"
-            docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator:1.15.0.pre.beta --user ${CIRCLE_PROJECT_USERNAME} --project ${CIRCLE_PROJECT_REPONAME} --token ${GITHUB_TOKEN} --since-tag $LAST_VERSION
+            docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator:1.15.0.pre.beta --user ${CIRCLE_PROJECT_USERNAME} --project ${CIRCLE_PROJECT_REPONAME} --token ${GITHUB_TOKEN} --since-tag $LAST_VERSION --no-unreleased
       - store_artifacts:
           path: /tmp/workspaces/changelog
       - persist_to_workspace:
@@ -225,10 +225,6 @@ jobs:
       - attach_workspace:
           at: /tmp/workspaces
       - run:
-          name: debug
-          command: |
-            git status
-      - run:
           name: merge to master
           command: |
             git checkout master
@@ -245,7 +241,22 @@ jobs:
             CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
             git tag v$CURRENT_VERSION
             git push origin v$CURRENT_VERSION
+      - run:
+          name: delete the release branch
+          command: |
+            git push origin master
+            git push origin --delete ${CIRCLE_BRANCH}
 
+  create_gh_release:
+    <<: *container_releasemanager
+    working_directory: /tmp/workspaces/build
+    steps:
+      - *run_task_prepare_jq
+      - *run_task_configure_git
+      - *run_task_add_key
+      - *run_task_add_gh_known_hosts
+      - attach_workspace:
+          at: /tmp/workspaces
       - run:
           name: create github pre-release
           command: |
@@ -258,19 +269,13 @@ jobs:
                 --name "v${CURRENT_VERSION}" \
                 --description "${message}" \
                 --pre-release
-      - run:
-          name: delete the release branch
-          command: |
-            git push origin master
-            git push origin --delete ${CIRCLE_BRANCH}
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - check_grade_up_build
-      - generate-changelog:
-          requires:
-            - check_grade_up_build
+
       - builddocs:
           requires:
             - check_grade_up_build
@@ -296,4 +301,8 @@ workflows:
                 - /release\/v.*-pre/
           requires:
             - finializebuild
-            - generate-changelog
+      - generate-changelog:
+          requires:
+            - integrate_release
+      - create_gh_release:
+          - generate-changelog
