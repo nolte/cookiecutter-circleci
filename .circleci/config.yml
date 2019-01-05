@@ -69,7 +69,7 @@ aliases:
         git clone $CIRCLE_REPOSITORY_URL --branch gh-pages --single-branch /tmp/ghpage
         cd /tmp/ghpage
         git rm -rf .
-        cp -r /home/circleci/project/.tox/docs/tmp/html/. /tmp/ghpage
+        cp -r /tmp/workspace_ghpage/html/. /tmp/ghpage
         git add -A
         git commit -m "[ci skip] Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
         git push origin gh-pages
@@ -136,6 +136,7 @@ jobs:
       - *run_task_add_key
       - attach_workspace:
           at: /tmp/workspace_ghpage
+      - *run_task_push_github_page
       - run:
           name: build the sphinx documentation
           command: |
