@@ -43,6 +43,7 @@ aliases:
       name: Load the Latest GH Release
       command: |
         CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
+        mkdir -p /tmp/workspace/
         echo $CURRENT_VERSION > /tmp/workspace/current_version.txt
 
 
