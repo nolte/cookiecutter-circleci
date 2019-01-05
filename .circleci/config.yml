@@ -163,7 +163,7 @@ jobs:
             github-release release \
                 --user ${CIRCLE_PROJECT_USERNAME} \
                 --repo ${CIRCLE_PROJECT_REPONAME} \
-                --tag v$CURRENT_VERSION \
+                --tag "v${CURRENT_VERSION}" \
                 --name "the wolf of source street" \
                 --description "Not a movie, contrary to popular opinion. Still, my first release!" \
                 --pre-release
