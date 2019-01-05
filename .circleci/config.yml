@@ -40,9 +40,6 @@ jobs:
 
   integrate_release:
     <<: *container_python
-    branches:
-      only:
-        - /release-.*-pre/
     steps:
       - checkout
       - run:
@@ -58,6 +55,10 @@ workflows:
       - builddocs
       - testing
       - integrate_release:
+          filters:
+            branches:
+              only:
+                - /release-.*-pre/
           requires:
             - testing
             - builddocs
