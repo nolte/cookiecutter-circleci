@@ -125,9 +125,9 @@ jobs:
           path: .tox/docs/tmp/html
           destination: sphinx
       - persist_to_workspace:
-          root: /tmp/workspace_ghpage
+          root: /tmp/workspace_ghpage/.tox/docs/tmp
           paths:
-              - .tox/docs/tmp/html
+              - html
 
   publishghpage:
     <<: *container_python
@@ -140,6 +140,7 @@ jobs:
           name: build the sphinx documentation
           command: |
             ls -all /tmp/workspace_ghpage
+            ls -all /tmp/workspace_ghpage/html
 
   testing:
     <<: *container_python
