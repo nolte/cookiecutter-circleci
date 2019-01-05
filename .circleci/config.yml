@@ -2,7 +2,7 @@ version: 2
 aliases:
 
   # SSH Deployment key for github Pushing,
-  - &deploy_ssh_fingerprint "1a:10:6a:88:8a:a7:ef:95:55:be:15:2b:02:bd:3b:cb"
+  - &deploy_ssh_fingerprint "4d:ef:59:3c:a4:28:0d:92:f7:3d:79:9c:b9:e0:56:8f"
 
   # add the GitHub Deployment Key to the ssh-agent
   # @see https://circleci.com/docs/2.0/add-ssh-key/
