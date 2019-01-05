@@ -89,7 +89,6 @@ jobs:
     steps:
       - *run_task_prepare_jq
       - *run_task_load_latest_ghrelease
-      - *run_task_add_key
       - run:
           name: generate CHANGELOG.md
           command: |
@@ -132,6 +131,7 @@ jobs:
     steps:
       - *run_task_prepare_jq
       - *run_task_configure_git
+      - *run_task_add_key
       - checkout
       - run:
           name: debug
