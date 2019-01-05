@@ -242,7 +242,10 @@ jobs:
             CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
             git tag v$CURRENT_VERSION
             git push origin v$CURRENT_VERSION
-
+      - persist_to_workspace:
+          root: /tmp/workspaces
+          paths:
+              - build/*
   create_gh_release:
     <<: *container_releasemanager
     working_directory: /tmp/workspaces/build
