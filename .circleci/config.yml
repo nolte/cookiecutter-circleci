@@ -58,6 +58,6 @@ workflows:
       - builddocs
       - testing
       - integrate_release:
-        requires:
-          - testing
-          - builddocs
+          requires:
+            - testing
+            - builddocs
