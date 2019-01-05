@@ -14,7 +14,6 @@ def test_bake_project_with_tox_ini(cookies):
     assert result.project.join('docsRequirements.txt').check(exists=0)
 
     circleci_job_file = result.project.join('.circleci/config.yml');
-    print circleci_job_file.read()
     assert circleci_job_file.isfile()
     assert filecmp.cmp(str(circleci_job_file), 'tests/golden_files/minimal/config.yml',shallow=0)
 
@@ -27,7 +26,6 @@ def test_bake_project_with_tox_ini_and_sphinx(cookies):
     assert tox_file.isfile()
     assert filecmp.cmp(str(tox_file), 'tests/golden_files/sphinx/tox.ini',shallow=0)
     circleci_job_file = result.project.join('.circleci/config.yml');
-    print circleci_job_file.read()
     assert circleci_job_file.isfile()
     assert filecmp.cmp(str(circleci_job_file), 'tests/golden_files/sphinx/config.yml',shallow=0)
     assert result.project.join('docsRequirements.txt').check(exists=1)
