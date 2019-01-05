@@ -26,6 +26,8 @@ aliases:
         LAST_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest | jq -r '.tag_name' )"
         echo $LAST_VERSION > /tmp/workspace/last_release.txt
 
+
+
   # Load one version behind the latest GitHub Release
   # Reuqired jq in the path
   # @see https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
@@ -35,6 +37,14 @@ aliases:
       command: |
         PREVIOUS_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases | jq -r '.[1].tag_name' )"
         echo $PREVIOUS_VERSION > /tmp/workspace/previous_release.txt
+
+  - &run_task_load_current_version_bumpversion_cfg
+    run:
+      name: Load the Latest GH Release
+      command: |
+        CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
+        echo $CURRENT_VERSION > /tmp/workspace/current_version.txt
+
 
   # @see https://circleci.com/docs/2.0/language-python/
   # Used container for python based uilds
@@ -111,7 +121,6 @@ jobs:
           name: merge to master
           command: |
             echo "merge to master"
-
       - run:
           name: delete the release branch
           command: |
@@ -120,7 +129,18 @@ jobs:
           name: install aktau/github-release manager
           command: |
             go get github.com/aktau/github-release
-
+      - *run_task_load_current_version_bumpversion_cfg
+      - run:
+          name: install aktau/github-release manager
+          command: |
+            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            github-release release \
+                --user ${CIRCLE_PROJECT_USERNAME} \
+                --repo ${CIRCLE_PROJECT_REPONAME} \
+                --tag v$CURRENT_VERSION \
+                --name "the wolf of source street" \
+                --description "Not a movie, contrary to popular opinion. Still, my first release!" \
+                --pre-release
 
 workflows:
   version: 2
