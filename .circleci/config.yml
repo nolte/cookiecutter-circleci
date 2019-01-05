@@ -140,11 +140,9 @@ jobs:
       - run:
           name: merge to master
           command: |
+            git checkout master
+            git merge ${CIRCLE_BRANCH}
             echo "merge to master"
-      - run:
-          name: delete the release branch
-          command: |
-            echo "git push origin --delete ${CIRCLE_BRANCH}"
       - run:
           name: install aktau/github-release manager
           command: |
@@ -156,6 +154,7 @@ jobs:
             CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
             git tag v$CURRENT_VERSION
             git push origin v$CURRENT_VERSION
+
       - run:
           name: install aktau/github-release manager
           command: |
@@ -167,7 +166,11 @@ jobs:
                 --name "v${CURRENT_VERSION}" \
                 --description "simple release" \
                 --pre-release
-
+      - run:
+          name: delete the release branch
+          command: |
+            git push origin master
+            git push origin --delete ${CIRCLE_BRANCH}
 workflows:
   version: 2
   build_and_test:
