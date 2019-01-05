@@ -1,8 +1,74 @@
 version: 2
 aliases:
+
+  # SSH Deployment key for github Pushing,
+  - &deploy_ssh_fingerprint "4d:ef:59:3c:a4:28:0d:92:f7:3d:79:9c:b9:e0:56:8f"
+
+  # add the GitHub Deployment Key to the ssh-agent
+  # @see https://circleci.com/docs/2.0/add-ssh-key/
+  - &run_task_add_key
+    add_ssh_keys:
+      fingerprints:
+        - *deploy_ssh_fingerprint
+
+  - &run_task_configure_git
+    run:
+      name: configure git set global settings
+      command: |
+        git config --global user.email "$GIT_AUTHOR_EMAIL"
+        git config --global user.name "${CIRCLE_USERNAME}"
+
+  # @see https://github.com/aktau/github-release
+  # Used container for handle github release actions
+  - &container_releasemanager
+    docker:
+      - image: circleci/golang:1.8
+
+  # @see https://stedolan.github.io/jq/
+  # used for better JSon Command Line parsing.
+  - &run_task_prepare_jq
+    run:
+      name: install jq to path
+      command: |
+        sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
+        sudo chmod +x /usr/bin/jq
+
+  # Load the latest GitHub Release
+  # Reuqired jq in the path
+  # @see https://developer.github.com/v3/repos/releases/#get-the-latest-release
+  - &run_task_load_latest_ghrelease
+    run:
+      name: Load the Latest GH Release
+      command: |
+        LAST_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest | jq -r '.tag_name' )"
+        echo $LAST_VERSION > /tmp/workspace/last_release.txt
+
+
+
+  # Load one version behind the latest GitHub Release
+  # Reuqired jq in the path
+  # @see https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
+  - &run_task_load_previous_ghrelease
+    run:
+      name: Load the Previous GH Release
+      command: |
+        PREVIOUS_VERSION="$(curl https://${GITHUB_TOKEN}@api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases | jq -r '.[1].tag_name' )"
+        echo $PREVIOUS_VERSION > /tmp/workspace/previous_release.txt
+
+  - &run_task_load_current_version_bumpversion_cfg
+    run:
+      name: Load the Current Version from .bumpversion.cfg
+      command: |
+        CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
+        mkdir -p /tmp/workspace/
+        echo $CURRENT_VERSION > /tmp/workspace/current_version.txt
+
+
+  # @see https://circleci.com/docs/2.0/language-python/
+  # Used container for python based uilds
   - &container_python
     docker:
-      - image: circleci/python:3.6.4  # primary container for the build job
+      - image: circleci/python:3.6.4
 
   - &run_task_install_tox_dependencies
     run:
@@ -13,6 +79,28 @@ aliases:
         sudo pip install tox
 
 jobs:
+
+  # generate a changelog from existing github commits/pull requests
+  # using https://github.com/ferrarimarco/docker-github-changelog-generator as generate container
+  # the container wraps https://github.com/github-changelog-generator/github-changelog-generator
+  generate-changelog:
+    machine: true
+    working_directory: /tmp/workspace
+    steps:
+      - *run_task_prepare_jq
+      - *run_task_load_latest_ghrelease
+      - run:
+          name: generate CHANGELOG.md
+          command: |
+            LAST_VERSION="$(cat /tmp/workspace/last_release.txt)"
+            docker run -it --rm -v "$(pwd)":/usr/local/src/your-app ferrarimarco/github-changelog-generator:1.15.0.pre.beta --user ${CIRCLE_PROJECT_USERNAME} --project ${CIRCLE_PROJECT_REPONAME} --token ${GITHUB_TOKEN} --since-tag $LAST_VERSION
+      - store_artifacts:
+          path: /tmp/workspace
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+              - CHANGELOG.md
+
   builddocs:
     <<: *container_python
     steps:
@@ -39,26 +127,59 @@ jobs:
           path: .tox/test/tmp/reports
 
   integrate_release:
-    <<: *container_python
+    <<: *container_releasemanager
     steps:
+      - *run_task_prepare_jq
+      - *run_task_configure_git
+      - *run_task_add_key
       - checkout
+      - run:
+          name: debug
+          command: |
+            git status
       - run:
           name: merge to master
           command: |
             echo "merge to master"
-
+      - run:
+          name: delete the release branch
+          command: |
+            echo "git push origin --delete ${CIRCLE_BRANCH}"
+      - run:
+          name: install aktau/github-release manager
+          command: |
+            go get github.com/aktau/github-release
+      - *run_task_load_current_version_bumpversion_cfg
+      - run:
+          name: create release tag
+          command: |
+            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            git tag v$CURRENT_VERSION
+            git push origin v$CURRENT_VERSION
+      - run:
+          name: install aktau/github-release manager
+          command: |
+            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            github-release release \
+                --user ${CIRCLE_PROJECT_USERNAME} \
+                --repo ${CIRCLE_PROJECT_REPONAME} \
+                --tag "v${CURRENT_VERSION}" \
+                --name "v${CURRENT_VERSION}" \
+                --description "simple release" \
+                --pre-release
 
 workflows:
   version: 2
   build_and_test:
     jobs:
+      - generate-changelog
       - builddocs
       - testing
       - integrate_release:
           filters:
             branches:
               only:
-                - /release-.*-pre/
+                - /release\/v.*-pre/
           requires:
             - testing
             - builddocs
