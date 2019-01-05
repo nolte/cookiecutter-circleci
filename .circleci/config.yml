@@ -178,7 +178,7 @@ jobs:
                 echo "File not found!"
                 releaseBranch="$(cat /tmp/workspaces/release_build.txt)"
                 git push origin release/$releaseBranch
-                git push origin $ ${CIRCLE_BRANCH}
+                git push origin ${CIRCLE_BRANCH}
             fi
   check_grade_up_build:
     <<: *container_python
@@ -250,7 +250,9 @@ jobs:
           name: create github pre-release
           command: |
             CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
-            message="$(cat /tmp/workspaces/changelog/CHANGELOG.md)"
+            ls -all /tmp/workspaces
+            message="$(cat /tmp/workspaces/CHANGELOG.md)"
+            changelog/CHANGELOG.md
             github-release release \
                 --user ${CIRCLE_PROJECT_USERNAME} \
                 --repo ${CIRCLE_PROJECT_REPONAME} \
