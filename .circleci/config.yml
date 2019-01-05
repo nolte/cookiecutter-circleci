@@ -113,6 +113,7 @@ jobs:
 
   builddocs:
     <<: *container_python
+    working_directory: /tmp/workspace_ghpage
     steps:
       - checkout
       - *run_task_install_tox_dependencies
@@ -126,7 +127,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace_ghpage
           paths:
-              - sphinx
+              - .tox/docs/tmp/html
 
   publishghpage:
     <<: *container_python
