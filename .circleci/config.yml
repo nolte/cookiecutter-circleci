@@ -154,7 +154,8 @@ jobs:
           name: create release tag
           command: |
             CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
-            git tag $CURRENT_VERSION
+            git tag v$CURRENT_VERSION
+            git push origin v$CURRENT_VERSION
       - run:
           name: install aktau/github-release manager
           command: |
