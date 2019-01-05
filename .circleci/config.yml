@@ -1,6 +1,23 @@
 version: 2
 aliases:
 
+  # SSH Deployment key for github Pushing,
+  - &deploy_ssh_fingerprint "1a:10:6a:88:8a:a7:ef:95:55:be:15:2b:02:bd:3b:cb"
+
+  # add the GitHub Deployment Key to the ssh-agent
+  # @see https://circleci.com/docs/2.0/add-ssh-key/
+  - &run_task_add_key
+    add_ssh_keys:
+      fingerprints:
+        - *deploy_ssh_fingerprint
+
+  - &run_task_configure_git
+    run:
+      name: configure git set global settings
+      command: |
+        git config --global user.email "$GIT_AUTHOR_EMAIL"
+        git config --global user.name "${CIRCLE_USERNAME}"
+
   # @see https://github.com/aktau/github-release
   # Used container for handle github release actions
   - &container_releasemanager
@@ -72,6 +89,7 @@ jobs:
     steps:
       - *run_task_prepare_jq
       - *run_task_load_latest_ghrelease
+      - *run_task_add_key
       - run:
           name: generate CHANGELOG.md
           command: |
@@ -113,6 +131,7 @@ jobs:
     <<: *container_releasemanager
     steps:
       - *run_task_prepare_jq
+      - *run_task_configure_git
       - checkout
       - run:
           name: debug
@@ -130,7 +149,7 @@ jobs:
           name: install aktau/github-release manager
           command: |
             go get github.com/aktau/github-release
-      - *run_task_load_current_version_bumpversion_cfg            
+      - *run_task_load_current_version_bumpversion_cfg
       - run:
           name: create release tag
           command: |
