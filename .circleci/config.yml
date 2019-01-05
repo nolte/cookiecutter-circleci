@@ -63,6 +63,16 @@ aliases:
         mkdir -p /tmp/workspace/
         echo $CURRENT_VERSION > /tmp/workspace/current_version.txt
 
+  - &run_task_push_github_page
+    run:
+      command: |
+        git clone $CIRCLE_REPOSITORY_URL --branch gh-pages --single-branch /tmp/ghpage
+        cd /tmp/ghpage
+        git rm -rf .
+        cp -r /home/circleci/project/.tox/docs/tmp/html/. /tmp/ghpage
+        git add -A
+        git commit -m "[ci skip] Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
+        git push origin gh-pages
 
   # @see https://circleci.com/docs/2.0/language-python/
   # Used container for python based uilds
@@ -113,6 +123,22 @@ jobs:
       - store_artifacts:
           path: .tox/docs/tmp/html
           destination: sphinx
+      - persist_to_workspace:
+          root: /tmp/workspace_ghpage
+          paths:
+              - sphinx
+
+  publishghpage:
+    <<: *container_python
+    steps:
+      - *run_task_configure_git
+      - *run_task_add_key
+      - attach_workspace:
+          at: /tmp/workspace_ghpage
+      - run:
+          name: build the sphinx documentation
+          command: |
+            ls -all /tmp/workspace_ghpage
 
   testing:
     <<: *container_python
@@ -178,6 +204,9 @@ workflows:
       - generate-changelog
       - builddocs
       - testing
+      - publishghpage:
+          requires:
+            - builddocs
       - integrate_release:
           filters:
             branches:
