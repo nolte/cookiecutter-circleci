@@ -23,20 +23,10 @@ jobs:
           command: |
             tox -e test
       - store_test_results:
-          path: .tox/test/tmp/reports{% if cookiecutter.generate_sphinx_doc == "y" %}
-  builddocs:
-    <<: *container_python
-    steps:
-      - checkout
-      - *run_task_install_tox_dependencies
-      - run:
-          name: build the sphinx documentation
-          command: |
-            tox -e docs{% endif %}
+          path: .tox/test/tmp/reports
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - testing{% if cookiecutter.generate_sphinx_doc == "y" %}
-      - builddocs{% endif %}
+      - testing

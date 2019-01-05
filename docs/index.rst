@@ -7,3 +7,4 @@ Index
    :maxdepth: 3
 
    self
+   usage

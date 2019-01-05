@@ -19,15 +19,6 @@ Usage
 
 Install `cookiecutter <https://pypi.org/project/cookiecutter/>`_ to your local machine.
 
-.. danger::
-
-   Be carefull when the config are generated to a existing project. Existing files will be overwrite.
-
-
-
-Creating the `.circleci/config.yml <https://circleci.com/docs/2.0/configuration-reference/#section=configuration>`_ Job Configuration.
-
-
 
 .. |Travis CI build status| image:: https://travis-ci.org/nolte/cookiecutter-circleci.svg?branch=develop
     :target: https://travis-ci.org/nolte/cookiecutter-circleci
