@@ -5,7 +5,7 @@
 
 [Cookiecutter Template](https://cookiecutter.readthedocs.io) for a [CircleCI](https://circleci.com/), [Continuous integration](https://en.wikipedia.org/wiki/Continuous_integration)/[Continuous delivery](https://en.wikipedia.org/wiki/Continuous_delivery) Pipeline, for different types of projects. Using [Tox](https://tox.readthedocs.io/en/latest/config.html) for abstraction the the Process workflow, from the project specific buildsteps.
 
-**Current Version:** 0.5.0-dev
+**Current Version:** 0.5.0
 
 ## Features
 
