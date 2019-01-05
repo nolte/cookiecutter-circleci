@@ -116,6 +116,11 @@ jobs:
           name: delete the release branch
           command: |
             echo "git push origin --delete ${CIRCLE_BRANCH}"
+      - run:
+          name: install aktau/github-release manager
+          command: |
+            go get github.com/aktau/github-release
+
 
 workflows:
   version: 2
