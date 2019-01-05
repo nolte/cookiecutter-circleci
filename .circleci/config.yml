@@ -40,7 +40,7 @@ aliases:
 
   - &run_task_load_current_version_bumpversion_cfg
     run:
-      name: Load the Latest GH Release
+      name: Load the Current Version from .bumpversion.cfg
       command: |
         CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
         mkdir -p /tmp/workspace/
@@ -130,7 +130,12 @@ jobs:
           name: install aktau/github-release manager
           command: |
             go get github.com/aktau/github-release
-      - *run_task_load_current_version_bumpversion_cfg
+      - *run_task_load_current_version_bumpversion_cfg            
+      - run:
+          name: create release tag
+          command: |
+            CURRENT_VERSION="$(cat /tmp/workspace/current_version.txt)"
+            git tag $CURRENT_VERSION
       - run:
           name: install aktau/github-release manager
           command: |
