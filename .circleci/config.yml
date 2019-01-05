@@ -168,6 +168,7 @@ jobs:
     steps:
       - *run_task_configure_git
       - *run_task_add_key
+      - *run_task_add_gh_known_hosts
       - attach_workspace:
           at: /tmp/workspaces
       - run:
@@ -220,6 +221,7 @@ jobs:
       - *run_task_prepare_jq
       - *run_task_configure_git
       - *run_task_add_key
+      - *run_task_add_gh_known_hosts
       - attach_workspace:
           at: /tmp/workspaces
       - run:
