@@ -38,9 +38,26 @@ jobs:
       - store_test_results:
           path: .tox/test/tmp/reports
 
+  integrate_release:
+    <<: *container_python
+    branches:
+      only:
+        - /release-.*-pre/
+    steps:
+      - checkout
+      - run:
+          name: merge to master
+          command: |
+            echo "merge to master"
+
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - builddocs
       - testing
+      - integrate_release:
+        requires:
+          - testing
+          - builddocs
