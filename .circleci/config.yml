@@ -175,7 +175,7 @@ jobs:
           command: |
             if [ -f /tmp/workspaces/release_build.txt ]; then
                 echo "File not found!"
-                releaseBranch = $(cat /tmp/workspaces/release_build.txt)
+                releaseBranch="$(cat /tmp/workspaces/release_build.txt)"
                 git push origin release/$releaseBranch
                 git push origin $ ${CIRCLE_BRANCH}
             fi
