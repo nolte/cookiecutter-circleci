@@ -134,6 +134,7 @@ jobs:
     steps:
       - *run_task_configure_git
       - *run_task_add_key
+      - checkout
       - attach_workspace:
           at: /tmp/workspace_ghpage
       - *run_task_push_github_page
