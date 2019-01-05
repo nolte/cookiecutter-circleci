@@ -211,9 +211,10 @@ workflows:
       - publishghpage:
           requires:
             - builddocs
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
       - integrate_release:
           filters:
             branches:
