@@ -38,6 +38,11 @@ aliases:
       command: |
         sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
         sudo chmod +x /usr/bin/jq
+  - &run_task_prepare_github-release-manager
+    run:
+      name: install aktau/github-release manager
+      command: |
+        go get github.com/aktau/github-release
 
   # Load the latest GitHub Release
   # Reuqired jq in the path
@@ -230,10 +235,6 @@ jobs:
             git checkout master
             git merge ${CIRCLE_BRANCH}
             echo "merge to master"
-      - run:
-          name: install aktau/github-release manager
-          command: |
-            go get github.com/aktau/github-release
       - *run_task_load_current_version_bumpversion_cfg
       - run:
           name: create release tag
@@ -241,11 +242,6 @@ jobs:
             CURRENT_VERSION="$(cat /tmp/workspaces/current_version.txt)"
             git tag v$CURRENT_VERSION
             git push origin v$CURRENT_VERSION
-      - run:
-          name: delete the release branch
-          command: |
-            git push origin master
-            git push origin --delete ${CIRCLE_BRANCH}
 
   create_gh_release:
     <<: *container_releasemanager
@@ -255,9 +251,10 @@ jobs:
       - *run_task_configure_git
       - *run_task_add_key
       - *run_task_add_gh_known_hosts
+      - *run_task_prepare_github-release-manager
       - attach_workspace:
           at: /tmp/workspaces
-      - *run_task_load_current_version_bumpversion_cfg    
+      - *run_task_load_current_version_bumpversion_cfg
       - run:
           name: create github pre-release
           command: |
@@ -270,7 +267,11 @@ jobs:
                 --name "v${CURRENT_VERSION}" \
                 --description "${message}" \
                 --pre-release
-
+      - run:
+          name: delete the release branch
+          command: |
+            git push origin master
+            git push origin --delete ${CIRCLE_BRANCH}
 workflows:
   version: 2
   build_and_test:
