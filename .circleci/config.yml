@@ -101,6 +101,18 @@ aliases:
         sudo apt install -y build-essential libssl-dev libpython-dev python python-pip
         sudo pip install tox
 
+  # @see http://chromedriver.chromium.org/
+  # install chromedriver for selenium tests
+  - &run_task_install_chromedriver_dependencies
+    run:
+      name: install chromedriver
+      command: |
+        wget -q https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip -O /tmp/chromedriver_linux64.zip
+        mkdir ${HOME}/chromedriver
+        unzip /tmp/chromedriver_linux64.zip -d ${HOME}/chromedriver
+        chmod +x ${HOME}/chromedriver
+        sudo sh /tmp/workspaces/build/ci-scripts/install_selenium_dependencies.sh
+
 jobs:
 
   # generate a changelog from existing github commits/pull requests
@@ -164,9 +176,10 @@ jobs:
       - run:
           name: execute the pytests documentation
           command: |
-            tox -e test
+            tox -e py36-test,py27-test
       - store_test_results:
           path: .tox/test/tmp/reports
+
   finializebuild:
     <<: *container_python
     working_directory: /tmp/workspaces/build
@@ -177,7 +190,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspaces
       - run:
-          name: execute the pytests documentation
+          name: Push changes to github if release build
           command: |
             if [ -f /tmp/workspaces/release_build.txt ]; then
                 echo "File not found!"
@@ -185,6 +198,7 @@ jobs:
                 git push origin release/$releaseBranch
                 git push origin ${CIRCLE_BRANCH}
             fi
+
   check_grade_up_build:
     <<: *container_python
     working_directory: /tmp/workspaces/build
@@ -194,11 +208,11 @@ jobs:
       - *run_task_install_tox_dependencies
       - checkout
       - run:
-          name: debug
+          name: install bumpversion
           command: |
             sudo pip install bumpversion
       - run:
-          name: debug
+          name: check is release build
           command: |
             GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
             echo $GIT_COMMIT_DESC
@@ -219,6 +233,7 @@ jobs:
           paths:
               - build/*
               - release_build.txt
+
   integrate_release:
     <<: *container_releasemanager
     working_directory: /tmp/workspaces/build
@@ -246,6 +261,7 @@ jobs:
           root: /tmp/workspaces
           paths:
               - build/*
+
   create_gh_release:
     <<: *container_releasemanager
     working_directory: /tmp/workspaces/build
@@ -275,12 +291,37 @@ jobs:
           command: |
             git push origin master
             git push origin --delete ${CIRCLE_BRANCH}
+
+  execute_integration_tests:
+    <<: *container_python
+    working_directory: /tmp/workspaces/build
+    environment:
+      CHROMEDRIVER_VERSION: 2.45
+      TOX_TEST_ENV: github-py36-integrationtests
+    steps:
+      - attach_workspace:
+          at: /tmp/workspaces
+      - *run_task_install_tox_dependencies
+      - *run_task_install_chromedriver_dependencies
+      - run:
+          name: execute selenium integrationtests
+          command: |
+            export PATH=$PATH:${HOME}/chromedriver
+            tox -e ${TOX_TEST_ENV}
+            mkdir -p /tmp/workspaces/testreports
+            cp -r .tox/${TOX_TEST_ENV}/tmp/reports/ /tmp/workspaces/testreports
+      - store_test_results:
+          path: /tmp/workspaces/testreports
+      - persist_to_workspace:
+          root: /tmp/workspaces/
+          paths:
+              - testreports
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - check_grade_up_build
-
       - builddocs:
           requires:
             - check_grade_up_build
@@ -312,3 +353,6 @@ workflows:
       - create_gh_release:
           requires:
             - generate-changelog
+      - execute_integration_tests:
+          requires:
+            - publishghpage
