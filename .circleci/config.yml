@@ -297,7 +297,7 @@ jobs:
     working_directory: /tmp/workspaces/build
     environment:
       CHROMEDRIVER_VERSION: 2.45
-      TOX_TEST_ENV: github-py36-integrationtests
+      TOX_TEST_ENV: py36-github-integrationtests
     steps:
       - attach_workspace:
           at: /tmp/workspaces
@@ -319,6 +319,18 @@ jobs:
 
 workflows:
   version: 2
+  execute_smoke_test:
+    jobs:
+      - check_grade_up_build
+      - execute_integration_tests:
+          requires:
+            - check_grade_up_build
+      - builddocs:
+          requires:
+            - check_grade_up_build
+      - testing:
+          requires:
+            - check_grade_up_build
   build_and_test:
     jobs:
       - check_grade_up_build
