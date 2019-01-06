@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Project Structure &mdash; Cookiecutter CircleCI Pipeline  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Development Process" href="process.html" />
+    <link rel="prev" title="Development" href="index.html" />
+ 
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Cookiecutter CircleCI Pipeline
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.10.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Cookiecutter Template for circleci BuildJobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Advanced Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Development</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Project Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base-directory-structure">Base Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="process.html">Development Process</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cookiecutter CircleCI Pipeline</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Development</a> &raquo;</li>
+        
+      <li>Project Structure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="project-structure">
+<h1>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="base-directory-structure">
+<h2>Base Directory Structure<a class="headerlink" href="#base-directory-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><cite>.bumpversion.cfg</cite></dt>
+<dd>Config file for <a class="reference external" href="https://github.com/peritus/bumpversion">bumpversion</a> handled the <a class="reference external" href="http://semver.org/">semantic versioning</a> process. More information at the <a class="reference internal" href="process.html#development-process"><span class="std std-ref">Development Process</span></a> description.</dd>
+<dt><cite>.circleci/config.yml</cite></dt>
+<dd><div class="first last line-block">
+<div class="line">Used <a class="reference external" href="https://circleci.com">CircleCI</a> for handle the <a class="reference internal" href="process.html#development-process-build"><span class="std std-ref">Build</span></a>, <a class="reference internal" href="process.html#development-process-test"><span class="std std-ref">Testing</span></a>, <a class="reference internal" href="process.html#development-process-release"><span class="std std-ref">Releasing</span></a> and <a class="reference internal" href="process.html#development-process-publish"><span class="std std-ref">Publishing</span></a> steps.</div>
+<div class="line"><strong>Status:</strong> <a class="reference external" href="https://circleci.com/gh/nolte/cookiecutter-circleci"><img alt="CircleCI build status" src="https://circleci.com/gh/nolte/cookiecutter-circleci.svg?style=svg" /></a></div>
+</div>
+</dd>
+<dt><cite>ci-scripts</cite></dt>
+<dd>Folder for ci utility scripts like, install selenium.</dd>
+<dt><cite>docs</cite></dt>
+<dd><div class="first last line-block">
+<div class="line">This project is documentated with <a class="reference external" href="http://www.sphinx-doc.org">sphinx-doc</a>. The generated deployment will be published to <cite>ReadTheDocs</cite> and <cite>nolte.github.io</cite>.</div>
+<div class="line"><strong>Status:</strong> <a class="reference external" href="https://cookiecutter-circleci.readthedocs.io/en/stable/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/cookiecutter-circleci/badge/?version=latest" /></a></div>
+</div>
+</dd>
+<dt><cite>.github</cite></dt>
+<dd>This folder is used form the <a class="reference external" href="https://blog.github.com/2016-02-17-issue-and-pull-request-templates/">GitHub Issue Templates</a>.</dd>
+<dt><cite>it-tests</cite></dt>
+<dd>This Folder contains <a class="reference external" href="https://pytest-selenium.readthedocs.io/en/latest/index.html">Selenium</a> based <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> integrations tests. Runned after a <a class="reference external" href="https://nolte.github.io/cookiecutter-circleci/">nolte.github.io/cookiecutter-circleci</a> deployment.</dd>
+<dt><cite>tests</cite></dt>
+<dd>Test for checking the CookieCutter Template generated projects, based on <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> and <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a>.</dd>
+<dt><cite>tox.ini</cite></dt>
+<dd><p class="first">Using <a class="reference external" href="https://tox.readthedocs.io/en/latest/">tox</a> for handle the different build and test configs.</p>
+<table border="1" class="last docutils" id="id2">
+<caption><span class="caption-text">Important Tox Environments</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tox Environment</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>{py27,py36}-test</td>
+<td>Start the local builds, used <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a> for testing the <a class="reference external" href="https://cookiecutter.readthedocs.io">cookiecutter</a> template, see <a class="reference internal" href="process.html#development-process-test-unit"><span class="std std-ref">Unit tests</span></a>.</td>
+</tr>
+<tr class="row-odd"><td>docs</td>
+<td>Generate the html <a class="reference external" href="http://www.sphinx-doc.org">sphinx-doc</a>. All required dependencies are listed in <cite>requirementsDocs.txt</cite></td>
+</tr>
+<tr class="row-even"><td>py36-{github,readthedocs-latest,readthedocs-stable}-integrationtests</td>
+<td>Start the Selenium Integration Tests for existing deployments, some type of Smoke Tests, see <a class="reference internal" href="process.html#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt><cite>.travis.yml</cite></dt>
+<dd><div class="first last line-block">
+<div class="line">Build config for the <a class="reference external" href="https://travis-ci.org">TravisCI</a> Job, used for testing different python versions.</div>
+<div class="line"><strong>Status:</strong> <a class="reference external" href="https://travis-ci.org/nolte/cookiecutter-circleci"><img alt="Travis CI build status" src="https://travis-ci.org/nolte/cookiecutter-circleci.svg?branch=develop" /></a></div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="process.html" class="btn btn-neutral float-right" title="Development Process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+<div class="github-fork-ribbon-wrapper right">
+  <div class="github-fork-ribbon">
+    <a href="https://github.com/nolte/cookiecutter-circleci">Fork me at GitHub</a>
+  </div>
+</div>
+ 
+
+
+</body>
+</html>

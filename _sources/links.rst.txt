@@ -12,3 +12,12 @@
     :target: https://github.com/nolte/cookiecutter-circleci
 
 .. _CircleCI: https://circleci.com
+.. _Selenium: https://pytest-selenium.readthedocs.io/en/latest/index.html
+.. _TravisCI: https://travis-ci.org
+.. _bumpversion: https://github.com/peritus/bumpversion
+.. _cookiecutter: https://cookiecutter.readthedocs.io
+.. _link-sphinx: http://www.sphinx-doc.org
+.. _pytest-cookies: https://github.com/hackebrot/pytest-cookies
+.. _pytest: https://docs.pytest.org/en/latest/
+.. _semantic versioning: http://semver.org/
+.. _tox: https://tox.readthedocs.io/en/latest/

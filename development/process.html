@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Development Process &mdash; Cookiecutter CircleCI Pipeline  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Project Structure" href="projectstructure.html" />
+ 
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Cookiecutter CircleCI Pipeline
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.10.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Cookiecutter Template for circleci BuildJobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Advanced Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="projectstructure.html">Project Structure</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Development Process</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branch-modell">Branch Modell</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#feature-branch">Feature Branch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#develop-branch">Develop Branch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#release-branch">Release Branch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#master-branch">Master Branch</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#build">Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#static-tests">Static tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unit-tests">Unit tests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integrations-tests">Integrations tests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#releasing">Releasing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#versioning">Versioning</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#publishing">Publishing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#github-release">Github Release</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#github-page">Github Page</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Cookiecutter CircleCI Pipeline</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Development</a> &raquo;</li>
+        
+      <li>Development Process</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="development-process">
+<span id="id1"></span><h1>Development Process<a class="headerlink" href="#development-process" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="branch-modell">
+<span id="development-process-branch-model"></span><h2>Branch Modell<a class="headerlink" href="#branch-modell" title="Permalink to this headline">¶</a></h2>
+<p>As Branchmodel we use a mix of <a class="reference external" href="https://datasift.github.io/gitflow/IntroducingGitFlow.html">Gitflow</a> and <a class="reference external" href="https://help.github.com/articles/about-pull-requests/">pull-requests</a>.
+Gitflow is used for the Release Process, the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch present the latest Published Release.
+PullRequests are used for integrate external changes and <code class="docutils literal notranslate"><span class="pre">feature</span></code> branches into the <a class="reference internal" href="#development-process-branch-model-develop"><span class="std std-ref">Develop Branch</span></a>.</p>
+<div class="section" id="feature-branch">
+<h3>Feature Branch<a class="headerlink" href="#feature-branch" title="Permalink to this headline">¶</a></h3>
+<p>New features will be develop in feature branches like <code class="docutils literal notranslate"><span class="pre">feature/integrate-cuberite</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Please dont use use <code class="docutils literal notranslate"><span class="pre">feature/*</span></code> branches in your production Environment.</p>
+</div>
+</div>
+<div class="section" id="develop-branch">
+<span id="development-process-branch-model-develop"></span><h3>Develop Branch<a class="headerlink" href="#develop-branch" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch contains the latest unrelesed version from the template, mostly stable ;)</p>
+</div>
+<div class="section" id="release-branch">
+<span id="development-process-branch-model-release"></span><h3>Release Branch<a class="headerlink" href="#release-branch" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="master-branch">
+<h3>Master Branch<a class="headerlink" href="#master-branch" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">master</span></code> present the latest published release.</p>
+</div>
+</div>
+<div class="section" id="build">
+<span id="development-process-build"></span><h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="testing">
+<span id="development-process-test"></span><h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="static-tests">
+<h3>Static tests<a class="headerlink" href="#static-tests" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="unit-tests">
+<span id="development-process-test-unit"></span><h3>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="integrations-tests">
+<span id="development-process-test-integrationtest"></span><h3>Integrations tests<a class="headerlink" href="#integrations-tests" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="releasing">
+<span id="development-process-release"></span><h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline">¶</a></h2>
+<p>You can start the Release process with some commit like:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">empty</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;[GradeUP] grade up the branch&quot;</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">develop</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">With pushing this commit the Release Pipeline will started automatically.</div>
+<div class="line"><strong>The Process</strong></div>
+</div>
+<ul class="simple">
+<li>Update the version to new Release, see <a class="reference internal" href="#development-process-release-versioning"><span class="std std-ref">Versioning</span></a></li>
+<li>create the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></li>
+<li>prepare the <a class="reference internal" href="#development-process-branch-model-develop"><span class="std std-ref">Develop Branch</span></a> branch for next version.</li>
+<li>Create <a class="reference internal" href="#development-process-publish-gh-release"><span class="std std-ref">Github Release</span></a></li>
+<li>Publish <a class="reference internal" href="#development-process-publish-gh-page"><span class="std std-ref">Github Page</span></a></li>
+<li>execute <a class="reference internal" href="#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a></li>
+<li>delete the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></li>
+</ul>
+<div class="section" id="versioning">
+<span id="development-process-release-versioning"></span><h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">This project follows <a class="reference external" href="http://semver.org/">semantic versioning</a>.</div>
+<div class="line">In the context of semantic versioning, consider the role contract to be defined by the role variables.</div>
+</div>
+<ul class="simple">
+<li>Changes that require user intervention will increase the <strong>major</strong> version. This includes changing the default value of a role variable.</li>
+<li>Changes that do not require user intervention, but add backwards-compatible features, will increase the <strong>minor</strong> version.</li>
+<li>Bug fixes will increase the <strong>patch</strong> version.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="publishing">
+<span id="development-process-publish"></span><h2>Publishing<a class="headerlink" href="#publishing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="github-release">
+<span id="development-process-publish-gh-release"></span><h3>Github Release<a class="headerlink" href="#github-release" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="github-page">
+<span id="development-process-publish-gh-page"></span><h3>Github Page<a class="headerlink" href="#github-page" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="projectstructure.html" class="btn btn-neutral" title="Project Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+<div class="github-fork-ribbon-wrapper right">
+  <div class="github-fork-ribbon">
+    <a href="https://github.com/nolte/cookiecutter-circleci">Fork me at GitHub</a>
+  </div>
+</div>
+ 
+
+
+</body>
+</html>
