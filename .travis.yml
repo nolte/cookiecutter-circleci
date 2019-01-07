@@ -12,6 +12,7 @@ env:
   matrix:
     - SCENARIO_NAME=docs
     - SCENARIO_NAME=test
+    - SCENARIO_NAME=flake8
 install:
   - pip install tox-travis
 script:

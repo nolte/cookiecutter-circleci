@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-import sys
-import os
-import shlex
-
-
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
@@ -26,7 +21,7 @@ templates_path = ['_templates']
 source_suffix = ['.rst', '.md']
 
 # The encoding of source files.
-#source_encoding = 'utf-8-sig'
+# source_encoding = 'utf-8-sig'
 
 # The master toctree document.
 master_doc = 'index'

@@ -166,6 +166,19 @@ jobs:
       - *run_task_add_gh_known_hosts
       - *run_task_push_github_page
 
+  statictests:
+    <<: *container_python
+    working_directory: /tmp/workspaces/build
+    steps:
+      - attach_workspace:
+          at: /tmp/workspaces
+      - *run_task_install_tox_dependencies
+      - run:
+          name: execute the flake8 static tests
+          command: |
+            tox -e flake8
+      - store_test_results:
+          path: .tox/test/tmp/reports
   testing:
     <<: *container_python
     working_directory: /tmp/workspaces/build
@@ -322,24 +335,30 @@ workflows:
   execute_smoke_test:
     jobs:
       - check_grade_up_build
+      - statictests:
+          requires:
+            - check_grade_up_build
       - execute_integration_tests:
           requires:
-            - check_grade_up_build
+            - statictests
       - builddocs:
           requires:
-            - check_grade_up_build
+            - statictests
       - testing:
           requires:
-            - check_grade_up_build
+            - statictests
   build_and_test:
     jobs:
       - check_grade_up_build
+      - statictests:
+          requires:
+            - check_grade_up_build
       - builddocs:
           requires:
-            - check_grade_up_build
+            - statictests
       - testing:
           requires:
-            - check_grade_up_build
+            - statictests
       - publishghpage:
           requires:
             - builddocs
