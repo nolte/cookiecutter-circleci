@@ -24,7 +24,6 @@ jobs:
       python:
         - "3.6"
       env:
-        - SCENARIO_NAME=local
         - CHROMEDRIVER_VERSION=2.45
       before_install:
         - ls -all $TRAVIS_BUILD_DIR
@@ -38,4 +37,4 @@ jobs:
         - pip install git+https://github.com/nolte/tox-docker@develop
         - pip install tox-travis
       script:
-        - tox -e ${SCENARIO_NAME}
+        - tox -e local
