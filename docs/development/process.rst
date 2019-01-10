@@ -57,7 +57,7 @@ Static tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For the Static Tests we use `flake8 <http://flake8.pycqa.org/en/latest/>`_, this will check the style.
-The cofiguration can found at the `tox.ini`
+The cofiguration can found at the ``tox.ini``
 
 .. _development-process-test-unit:
 

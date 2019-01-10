@@ -15,7 +15,7 @@ Base Directory Structure
   Folder for ci utility scripts like, install selenium.
 
 `docs`
-  | This project is documentated with `sphinx-doc`_. The generated deployment will be published to `ReadTheDocs` and `nolte.github.io`.
+  | This project is documentated with `sphinx-doc`_. The generated deployment will be published to ``ReadTheDocs`` and ``nolte.github.io``.
   | **Status:** |Documentation Status|
 
 `.github`
@@ -38,7 +38,7 @@ Base Directory Structure
      * - {py27,py36}-test
        - Start the local builds, used `pytest-cookies`_ for testing the `cookiecutter`_ template, see :ref:`development-process-test-unit`.
      * - docs
-       - Generate the html `sphinx-doc`_. All required dependencies are listed in `requirementsDocs.txt`
+       - Generate the html `sphinx-doc`_. All required dependencies are listed in ``requirementsDocs.txt``
      * - py36-{github,readthedocs-latest,readthedocs-stable}-integrationtests
        - Start the Selenium Integration Tests for existing deployments, some type of Smoke Tests, see :ref:`development-process-test-integrationtest`.
 
