@@ -24,7 +24,7 @@ jobs:
       python:
         - "3.6"
       env:
-        - SCENARIO_NAME=py36-github-integrationtests,py36-readthedocs-latest-integrationtests,py36-readthedocs-stable-integrationtests
+        - SCENARIO_NAME=local
         - CHROMEDRIVER_VERSION=2.45
       before_install:
         - ls -all $TRAVIS_BUILD_DIR
@@ -35,6 +35,7 @@ jobs:
         - sudo sh $TRAVIS_BUILD_DIR/ci-scripts/install_selenium_dependencies.sh
         - export PATH=$PATH:${HOME}/chromedriver
       install:
+        - pip install git+https://github.com/nolte/tox-docker@develop
         - pip install tox-travis
       script:
         - tox -e ${SCENARIO_NAME}
