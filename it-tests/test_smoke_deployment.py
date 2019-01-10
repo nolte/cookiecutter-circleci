@@ -16,7 +16,7 @@ def prepare_test_baseurl():
         url = os.environ["SELENIUM_BASE_URL"]
     else:
         url = "http://{host}:{port}/".format(
-            host=os.environ["NGINX_HOST"], port=os.environ["NGINX_80_TCP"]
+            host="localhost", port=os.environ["NGINX_80_TCP"]
         )
     return url
 
