@@ -37,4 +37,4 @@ jobs:
         - pip install git+https://github.com/nolte/tox-docker@develop
         - pip install tox-travis
       script:
-        - tox -e py36-local-integrationtests
+        - tox -e docs,py36-local-integrationtests
