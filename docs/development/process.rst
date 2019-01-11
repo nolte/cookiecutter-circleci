@@ -35,6 +35,10 @@ The ``develop`` branch contains the latest unrelesed version from the template, 
 Release Branch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Branches like ``release/v1.2.0-pre`` are used for creating/trigger the release steps on |CircleCI build status|.
+This branch will be removed after successfull publishing the Release.
+
+
 Master Branch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

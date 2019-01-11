@@ -10,10 +10,16 @@ aliases:
     add_ssh_keys:
       fingerprints:
         - *deploy_ssh_fingerprint
+
+  # add github.com to known_hosts list, this is required for pushing changes.
   - &run_task_add_gh_known_hosts
     run:
       name: Keyscan Github (HACK)
-      command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      command: |
+        mkdir -p ${HOME}/.ssh
+        chmod 700 ${HOME}/.ssh
+        ssh-keyscan -H github.com >> ${HOME}/.ssh/known_hosts
+        chmod 644 ${HOME}/.ssh/known_hosts
 
   # Configure git user settings
   # @see https://help.github.com/articles/setting-your-username-in-git/
@@ -38,6 +44,9 @@ aliases:
       command: |
         sudo wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
         sudo chmod +x /usr/bin/jq
+
+  # @see https://github.com/aktau/github-release
+  # install go tool for creating the github release
   - &run_task_prepare_github-release-manager
     run:
       name: install aktau/github-release manager
@@ -74,6 +83,9 @@ aliases:
         CURRENT_VERSION="$(cat .bumpversion.cfg | grep current_version | sed -r s,"^.*=",, | sed 's/ //')"
         echo $CURRENT_VERSION > /tmp/workspaces/current_version.txt
 
+  # Pushing the created gh page to the branch gh-pages, this faild if the branch not exists!
+  # TODO: harder this task, create the branch if not exists
+  # TODO: extract target branch name to env
   - &run_task_push_github_page
     run:
       command: |
@@ -99,7 +111,27 @@ aliases:
       command: |
         sudo apt-get -qq update
         sudo apt install -y build-essential libssl-dev libpython-dev python python-pip
-        sudo pip install tox
+
+  - &var_python_tox_venv "${HOME}/venv/tox"
+
+  - &run_task_python_create_env
+    run:
+      name: install tox dependencies
+      command: |
+        virtualenv -p python3.6 ${VENV_NAME}
+      environment:
+        VENV_NAME: *var_python_tox_venv
+
+  - &run_task_python_install_tox
+    run:
+      name: install tox dependencies
+      command: |
+        virtualenv -p python3.6 ${VENV_NAME}
+        . ${VENV_NAME}
+        pip install tox
+      environment:
+        VENV_NAME: *var_python_tox_venv"/bin/activate"
+
 
   # @see http://chromedriver.chromium.org/
   # install chromedriver for selenium tests
@@ -143,10 +175,15 @@ jobs:
       - attach_workspace:
           at: /tmp/workspaces
       - *run_task_install_tox_dependencies
+      - *run_task_python_create_env
+      - *run_task_python_install_tox
       - run:
           name: build the sphinx documentation
           command: |
+            . ${VENV_NAME}
             tox -e docs
+          environment:
+            VENV_NAME: *var_python_tox_venv
       - store_artifacts:
           path: .tox/docs/tmp/html
           destination: sphinx
