@@ -17,6 +17,7 @@
 .. _bumpversion: https://github.com/peritus/bumpversion
 .. _cookiecutter: https://cookiecutter.readthedocs.io
 .. _link-sphinx: http://www.sphinx-doc.org
+.. _sphinx-doc: http://www.sphinx-doc.org
 .. _pytest-cookies: https://github.com/hackebrot/pytest-cookies
 .. _pytest: https://docs.pytest.org/en/latest/
 .. _semantic versioning: http://semver.org/

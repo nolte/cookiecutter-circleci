@@ -56,7 +56,9 @@ Testing
 Static tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the Static Tests we use `flake8 <http://flake8.pycqa.org/en/latest/>`_, this will check the style.
+For the Static Tests we use `flake8 <http://flake8.pycqa.org/en/latest/>`_,
+this will check the style, `pep8 <https://www.python.org/dev/peps/pep-0008/>`_,
+for automatical fixing and formatting we use `pre-commit <https://pre-commit.com/>`_.
 The cofiguration can found at the ``tox.ini``
 
 .. _development-process-test-unit:
@@ -64,12 +66,18 @@ The cofiguration can found at the ``tox.ini``
 Unit tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+For simple unit tests we use the classic `pytest`_ framework, see ``./tests``.
+
 .. _development-process-test-integrationtest:
 
 Integrations tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
+This project has two different types of Integration Tests.
+One is the generation of a project with given defaults from ``cookiecutter.json``,
+for this type of tests we use `pytest-cookies`_.
+The focus of the second Types are the generated Documentation, the `sphinx-doc`_
+Documentation will deployed to a ``nginx`` container, and tested with `Selenium`_.
 
 .. _development-process-release:
 
