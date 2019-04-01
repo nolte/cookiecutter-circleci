@@ -80,7 +80,7 @@ You can start the Release process with some commit like:
 
 .. code:: bash
 
-  git commit --allow-empty -m "[GradeUP] grade up the branch"
+  git commit --allow-empty -m "[GradeUP][skip travis] grade up the branch"
   git push origin develop
 
 | With pushing this commit the Release Pipeline will started automatically.
