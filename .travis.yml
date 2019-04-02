@@ -10,7 +10,6 @@ python:
   - "3.6"
 env:
   matrix:
-    - SCENARIO_NAME=docs
     - SCENARIO_NAME=test
     - SCENARIO_NAME=flake8
 install:
@@ -20,6 +19,15 @@ script:
 
 jobs:
   include:
+    - stage: build docs
+      python:
+        - "3.6"
+      env:
+        - SCENARIO_NAME=docs
+      install:
+        - pip install tox-travis
+      script:
+        - tox -e ${SCENARIO_NAME}
     - stage: integration -tests
       python:
         - "3.6"
