@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -159,25 +159,24 @@
   <div class="section" id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h1>
 <p>For generate, or replace the <a class="reference external" href="https://circleci.com">CircleCI</a> pipeline of a existing project, use the <code class="docutils literal notranslate"><span class="pre">-f</span></code> option, and use the foldername as <code class="docutils literal notranslate"><span class="pre">project_slug</span></code>.</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cookiecutter</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nolte</span><span class="o">/</span><span class="n">cookiecutter</span><span class="o">-</span><span class="n">circleci</span><span class="o">.</span><span class="n">git</span> <span class="o">--</span><span class="n">checkout</span> <span class="n">develop</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cookiecutter https://github.com/nolte/cookiecutter-circleci.git --checkout develop
 </pre></div>
 </div>
 <div class="admonition danger">
-<p class="first admonition-title">Danger</p>
-<p class="last">Be carefull when the config are generated to a existing project. Existing files will be overwrite.</p>
+<p class="admonition-title">Danger</p>
+<p>Be carefull when the config are generated to a existing project. Existing files will be overwrite.</p>
 </div>
 <p>Creating the <a class="reference external" href="https://circleci.com/docs/2.0/configuration-reference/#section=configuration">.circleci/config.yml</a> Job Configuration.</p>
 <div class="section" id="template-variables">
 <h2>Template Variables<a class="headerlink" href="#template-variables" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt>generate_tox_file</dt>
-<dd>generating a <code class="docutils literal notranslate"><span class="pre">tox.ini</span></code> build script</dd>
-<dt>generate_sphinx_doc</dt>
-<dd>add required steps for generate sphinx documentation</dd>
-<dt>project_slug</dt>
-<dd>project folder name</dd>
-<dt>project_type</dt>
-<dd><div class="first last line-block">
+<dl>
+<dt>generate_tox_file</dt><dd><p>generating a <code class="docutils literal notranslate"><span class="pre">tox.ini</span></code> build script</p>
+</dd>
+<dt>generate_sphinx_doc</dt><dd><p>add required steps for generate sphinx documentation</p>
+</dd>
+<dt>project_slug</dt><dd><p>project folder name</p>
+</dd>
+<dt>project_type</dt><dd><div class="line-block">
 <div class="line">type of the project artefact, like cookiecutter, ansible roles, etc.</div>
 <div class="line">currently supported: <code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code></div>
 </div>

@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -196,8 +196,8 @@ PullRequests are used for integrate external changes and <code class="docutils l
 <h3>Feature Branch<a class="headerlink" href="#feature-branch" title="Permalink to this headline">¶</a></h3>
 <p>New features will be develop in feature branches like <code class="docutils literal notranslate"><span class="pre">feature/integrate-cuberite</span></code>.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Please dont use use <code class="docutils literal notranslate"><span class="pre">feature/*</span></code> branches in your production Environment.</p>
+<p class="admonition-title">Warning</p>
+<p>Please dont use use <code class="docutils literal notranslate"><span class="pre">feature/*</span></code> branches in your production Environment.</p>
 </div>
 </div>
 <div class="section" id="develop-branch">
@@ -232,8 +232,8 @@ The cofiguration can found at the <cite>tox.ini</cite></p>
 <div class="section" id="releasing">
 <span id="development-process-release"></span><h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline">¶</a></h2>
 <p>You can start the Release process with some commit like:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">empty</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;[GradeUP][skip travis] grade up the branch&quot;</span>
-<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">develop</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit --allow-empty -m <span class="s2">&quot;[GradeUP][skip travis] grade up the branch&quot;</span>
+git push origin develop
 </pre></div>
 </div>
 <div class="line-block">
@@ -241,13 +241,13 @@ The cofiguration can found at the <cite>tox.ini</cite></p>
 <div class="line"><strong>The Process</strong></div>
 </div>
 <ul class="simple">
-<li>Update the version to new Release, see <a class="reference internal" href="#development-process-release-versioning"><span class="std std-ref">Versioning</span></a></li>
-<li>create the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></li>
-<li>prepare the <a class="reference internal" href="#development-process-branch-model-develop"><span class="std std-ref">Develop Branch</span></a> branch for next version.</li>
-<li>Create <a class="reference internal" href="#development-process-publish-gh-release"><span class="std std-ref">Github Release</span></a></li>
-<li>Publish <a class="reference internal" href="#development-process-publish-gh-page"><span class="std std-ref">Github Page</span></a></li>
-<li>execute <a class="reference internal" href="#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a></li>
-<li>delete the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></li>
+<li><p>Update the version to new Release, see <a class="reference internal" href="#development-process-release-versioning"><span class="std std-ref">Versioning</span></a></p></li>
+<li><p>create the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></p></li>
+<li><p>prepare the <a class="reference internal" href="#development-process-branch-model-develop"><span class="std std-ref">Develop Branch</span></a> branch for next version.</p></li>
+<li><p>Create <a class="reference internal" href="#development-process-publish-gh-release"><span class="std std-ref">Github Release</span></a></p></li>
+<li><p>Publish <a class="reference internal" href="#development-process-publish-gh-page"><span class="std std-ref">Github Page</span></a></p></li>
+<li><p>execute <a class="reference internal" href="#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a></p></li>
+<li><p>delete the <a class="reference internal" href="#development-process-branch-model-release"><span class="std std-ref">Release Branch</span></a></p></li>
 </ul>
 <div class="section" id="versioning">
 <span id="development-process-release-versioning"></span><h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
@@ -256,9 +256,9 @@ The cofiguration can found at the <cite>tox.ini</cite></p>
 <div class="line">In the context of semantic versioning, consider the role contract to be defined by the role variables.</div>
 </div>
 <ul class="simple">
-<li>Changes that require user intervention will increase the <strong>major</strong> version. This includes changing the default value of a role variable.</li>
-<li>Changes that do not require user intervention, but add backwards-compatible features, will increase the <strong>minor</strong> version.</li>
-<li>Bug fixes will increase the <strong>patch</strong> version.</li>
+<li><p>Changes that require user intervention will increase the <strong>major</strong> version. This includes changing the default value of a role variable.</p></li>
+<li><p>Changes that do not require user intervention, but add backwards-compatible features, will increase the <strong>minor</strong> version.</p></li>
+<li><p>Bug fixes will increase the <strong>patch</strong> version.</p></li>
 </ul>
 </div>
 </div>

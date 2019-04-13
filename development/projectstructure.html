@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -166,57 +166,53 @@
 <h1>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="base-directory-structure">
 <h2>Base Directory Structure<a class="headerlink" href="#base-directory-structure" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt><cite>.bumpversion.cfg</cite></dt>
-<dd>Config file for <a class="reference external" href="https://github.com/peritus/bumpversion">bumpversion</a> handled the <a class="reference external" href="http://semver.org/">semantic versioning</a> process. More information at the <a class="reference internal" href="process.html#development-process"><span class="std std-ref">Development Process</span></a> description.</dd>
-<dt><cite>.circleci/config.yml</cite></dt>
-<dd><div class="first last line-block">
+<dl>
+<dt><cite>.bumpversion.cfg</cite></dt><dd><p>Config file for <a class="reference external" href="https://github.com/peritus/bumpversion">bumpversion</a> handled the <a class="reference external" href="http://semver.org/">semantic versioning</a> process. More information at the <a class="reference internal" href="process.html#development-process"><span class="std std-ref">Development Process</span></a> description.</p>
+</dd>
+<dt><cite>.circleci/config.yml</cite></dt><dd><div class="line-block">
 <div class="line">Used <a class="reference external" href="https://circleci.com">CircleCI</a> for handle the <a class="reference internal" href="process.html#development-process-build"><span class="std std-ref">Build</span></a>, <a class="reference internal" href="process.html#development-process-test"><span class="std std-ref">Testing</span></a>, <a class="reference internal" href="process.html#development-process-release"><span class="std std-ref">Releasing</span></a> and <a class="reference internal" href="process.html#development-process-publish"><span class="std std-ref">Publishing</span></a> steps.</div>
 <div class="line"><strong>Status:</strong> <a class="reference external" href="https://circleci.com/gh/nolte/cookiecutter-circleci"><img alt="CircleCI build status" src="https://circleci.com/gh/nolte/cookiecutter-circleci.svg?style=svg" /></a></div>
 </div>
 </dd>
-<dt><cite>ci-scripts</cite></dt>
-<dd>Folder for ci utility scripts like, install selenium.</dd>
-<dt><cite>docs</cite></dt>
-<dd><div class="first last line-block">
+<dt><cite>ci-scripts</cite></dt><dd><p>Folder for ci utility scripts like, install selenium.</p>
+</dd>
+<dt><cite>docs</cite></dt><dd><div class="line-block">
 <div class="line">This project is documentated with <a class="reference external" href="http://www.sphinx-doc.org">sphinx-doc</a>. The generated deployment will be published to <cite>ReadTheDocs</cite> and <cite>nolte.github.io</cite>.</div>
 <div class="line"><strong>Status:</strong> <a class="reference external" href="https://cookiecutter-circleci.readthedocs.io/en/stable/?badge=stable"><img alt="Documentation Status" src="https://readthedocs.org/projects/cookiecutter-circleci/badge/?version=latest" /></a></div>
 </div>
 </dd>
-<dt><cite>.github</cite></dt>
-<dd>This folder is used form the <a class="reference external" href="https://blog.github.com/2016-02-17-issue-and-pull-request-templates/">GitHub Issue Templates</a>.</dd>
-<dt><cite>it-tests</cite></dt>
-<dd>This Folder contains <a class="reference external" href="https://pytest-selenium.readthedocs.io/en/latest/index.html">Selenium</a> based <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> integrations tests. Runned after a <a class="reference external" href="https://nolte.github.io/cookiecutter-circleci/">nolte.github.io/cookiecutter-circleci</a> deployment.</dd>
-<dt><cite>tests</cite></dt>
-<dd>Test for checking the CookieCutter Template generated projects, based on <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> and <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a>.</dd>
-<dt><cite>tox.ini</cite></dt>
-<dd><p class="first">Using <a class="reference external" href="https://tox.readthedocs.io/en/latest/">tox</a> for handle the different build and test configs.</p>
-<table border="1" class="last docutils" id="id2">
+<dt><cite>.github</cite></dt><dd><p>This folder is used form the <a class="reference external" href="https://blog.github.com/2016-02-17-issue-and-pull-request-templates/">GitHub Issue Templates</a>.</p>
+</dd>
+<dt><cite>it-tests</cite></dt><dd><p>This Folder contains <a class="reference external" href="https://pytest-selenium.readthedocs.io/en/latest/index.html">Selenium</a> based <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> integrations tests. Runned after a <a class="reference external" href="https://nolte.github.io/cookiecutter-circleci/">nolte.github.io/cookiecutter-circleci</a> deployment.</p>
+</dd>
+<dt><cite>tests</cite></dt><dd><p>Test for checking the CookieCutter Template generated projects, based on <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> and <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a>.</p>
+</dd>
+<dt><cite>tox.ini</cite></dt><dd><p>Using <a class="reference external" href="https://tox.readthedocs.io/en/latest/">tox</a> for handle the different build and test configs.</p>
+<table class="docutils align-center" id="id2">
 <caption><span class="caption-text">Important Tox Environments</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col style="width: 50%" />
+<col style="width: 50%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Tox Environment</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tox Environment</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>{py27,py36}-test</td>
-<td>Start the local builds, used <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a> for testing the <a class="reference external" href="https://cookiecutter.readthedocs.io">cookiecutter</a> template, see <a class="reference internal" href="process.html#development-process-test-unit"><span class="std std-ref">Unit tests</span></a>.</td>
+<tbody>
+<tr class="row-even"><td><p>{py27,py36}-test</p></td>
+<td><p>Start the local builds, used <a class="reference external" href="https://github.com/hackebrot/pytest-cookies">pytest-cookies</a> for testing the <a class="reference external" href="https://cookiecutter.readthedocs.io">cookiecutter</a> template, see <a class="reference internal" href="process.html#development-process-test-unit"><span class="std std-ref">Unit tests</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td>docs</td>
-<td>Generate the html <a class="reference external" href="http://www.sphinx-doc.org">sphinx-doc</a>. All required dependencies are listed in <cite>requirementsDocs.txt</cite></td>
+<tr class="row-odd"><td><p>docs</p></td>
+<td><p>Generate the html <a class="reference external" href="http://www.sphinx-doc.org">sphinx-doc</a>. All required dependencies are listed in <cite>requirementsDocs.txt</cite></p></td>
 </tr>
-<tr class="row-even"><td>py36-{github,readthedocs-latest,readthedocs-stable}-integrationtests</td>
-<td>Start the Selenium Integration Tests for existing deployments, some type of Smoke Tests, see <a class="reference internal" href="process.html#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a>.</td>
+<tr class="row-even"><td><p>py36-{github,readthedocs-latest,readthedocs-stable}-integrationtests</p></td>
+<td><p>Start the Selenium Integration Tests for existing deployments, some type of Smoke Tests, see <a class="reference internal" href="process.html#development-process-test-integrationtest"><span class="std std-ref">Integrations tests</span></a>.</p></td>
 </tr>
 </tbody>
 </table>
 </dd>
-<dt><cite>.travis.yml</cite></dt>
-<dd><div class="first last line-block">
+<dt><cite>.travis.yml</cite></dt><dd><div class="line-block">
 <div class="line">Build config for the <a class="reference external" href="https://travis-ci.org">TravisCI</a> Job, used for testing different python versions.</div>
 <div class="line"><strong>Status:</strong> <a class="reference external" href="https://travis-ci.org/nolte/cookiecutter-circleci"><img alt="Travis CI build status" src="https://travis-ci.org/nolte/cookiecutter-circleci.svg?branch=develop" /></a></div>
 </div>
