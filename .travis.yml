@@ -6,7 +6,6 @@ branches:
     - /release\/v.*-pre/
 python:
   - "2.7"
-  - "3.4"
   - "3.6"
 env:
   matrix:
@@ -33,7 +32,7 @@ jobs:
         - "3.6"
       env:
         - SCENARIO_NAME=py36-github-integrationtests,py36-readthedocs-latest-integrationtests,py36-readthedocs-stable-integrationtests
-        - CHROMEDRIVER_VERSION=2.45
+        - CHROMEDRIVER_VERSION=73.0.3683.68
       before_install:
         - ls -all $TRAVIS_BUILD_DIR
         - wget -q https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip -O /tmp/chromedriver_linux64.zip
